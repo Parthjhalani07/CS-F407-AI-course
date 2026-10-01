@@ -45,7 +45,7 @@ def run_sentiment(sentences):
 def run_generation(prompts, max_new_tokens=40):
     """Decoder-only: masked (causal) self-attention, next-token prediction
     repeated autoregressively - the same sample -> append -> sample again
-    loop as Lab 5's n-gram model, just with a transformer computing the
+    loop as bn_lab's n-gram model, just with a transformer computing the
     conditional distribution instead of a count table."""
     name = "distilgpt2"
     tok = AutoTokenizer.from_pretrained(name)

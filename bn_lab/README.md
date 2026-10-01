@@ -1,4 +1,4 @@
-# Lab 5 - Bayesian Networks and Autoregressive Language Models
+# Bayesian Networks and Autoregressive Language Models
 
 **Course:** Undergraduate Artificial Intelligence
 **Topic:** Viewing an autoregressive language model as a Bayesian network, built with LLM assistance

@@ -1,4 +1,4 @@
-# Lab 6 - Bayesian Networks: Building and Learning (LLM + pgmpy)
+# Bayesian Networks: Building and Learning (LLM + pgmpy)
 
 **Course:** Undergraduate Artificial Intelligence
 **Topic:** Specifying a Bayesian network, generating its implementation with an LLM, and validating the result against an independent oracle

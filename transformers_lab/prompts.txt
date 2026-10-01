@@ -24,7 +24,7 @@ longer registers that pipeline task alias (confirmed by printing
 `AutoModelForSeq2SeqLM`/`AutoTokenizer` and calling `.generate()`
 myself, bypassing the `pipeline()` task-name lookup entirely - this is
 exactly the kind of "LLM used an API that doesn't match the installed
-library version" failure mode discussed in Lab 6's `prompts.txt`, caught
+library version" failure mode discussed in `llm_bn_lab/prompts.txt`, caught
 the same way: by running the code and reading the actual exception, not
 by inspecting the source.
 

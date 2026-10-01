@@ -1,4 +1,4 @@
-# Lab 4 - Search and A*
+# Search and A*
 
 **Course:** Undergraduate Artificial Intelligence
 **Topic:** Using an LLM to Construct and Test a Simple Planning/Search Agent
