@@ -1,0 +1,57 @@
+Prompt used with the LLM (Claude)
+===================================
+
+Write three small, self-contained Python functions using Hugging Face
+`transformers`, each demonstrating a different transformer architecture
+family on CPU, using small models suitable for a laptop with no GPU:
+
+  1. Encoder-decoder: machine translation (e.g. a MarianMT opus-mt model).
+  2. Encoder-only: sentiment analysis (e.g. a DistilBERT SST-2 model).
+  3. Decoder-only: GPT-style next-token text generation (e.g. distilgpt2).
+
+Keep each one to a handful of lines, and note in a comment which part of
+the encoder-decoder/encoder-only/decoder-only distinction each one
+exercises (self-attention vs cross-attention vs causal/masked attention).
+
+Note on what actually happened when running this (not a separate
+prompt - a real debugging step)
+---------------------------------------------------------------------
+`pipeline("translation_en_to_fr", ...)` raised `KeyError: Unknown task
+translation_en_to_fr` - the installed transformers version (5.18.0) no
+longer registers that pipeline task alias (confirmed by printing
+`PIPELINE_REGISTRY`'s supported task list, which no longer includes any
+"translation" variant). Fixed by loading the MarianMT model directly via
+`AutoModelForSeq2SeqLM`/`AutoTokenizer` and calling `.generate()`
+myself, bypassing the `pipeline()` task-name lookup entirely - this is
+exactly the kind of "LLM used an API that doesn't match the installed
+library version" failure mode discussed in Lab 6's `prompts.txt`, caught
+the same way: by running the code and reading the actual exception, not
+by inspecting the source.
+
+Decision about Ollama (this lab's "Running GPT type models Locally"
+section)
+---------------------------------------------------------------------
+The lab handout asks students to install Ollama locally and compare its
+responses to GPT/Claude. This was genuinely attempted:
+  - `curl -I https://ollama.com/download/ollama-linux-amd64.tgz` 307-
+    redirects to a GitHub release asset that no longer exists at that
+    path (Ollama has since switched its Linux release asset from a
+    `.tgz` to a `.tar.zst`, confirmed via the GitHub releases API).
+  - The current Linux release asset
+    (`ollama-linux-amd64.tar.zst`, v0.35.0) is **1.4 GB**, because it
+    bundles CUDA and ROCm GPU backends that are irrelevant on this
+    CPU-only sandboxed machine, on top of a disk budget of only ~18 GB
+    free.
+  - The official install script additionally wants `sudo` to install a
+    systemd service, and this environment has no passwordless sudo.
+  - Given the user's own pre-approved fallback instruction ("try it,
+    fall back to a lighter model if needed"), I substituted a small
+    open-weights instruction-tuned model (`Qwen/Qwen2.5-0.5B-Instruct`,
+    ~1 GB) run directly through the `transformers` `text-generation`
+    pipeline instead of through an Ollama server. This preserves the
+    actual exercise the lab cares about - prompt a small local
+    open-weights model and compare its answers against Claude's - just
+    swapping which piece of software is serving the model's weights.
+    See README.md's "Local LLM vs Claude" section for the comparison
+    and a concrete example of the local model giving an imprecise
+    answer that an engineer should not accept uncritically.

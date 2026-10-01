@@ -1,0 +1,39 @@
+Prompt used with the LLM (Claude) to generate the A* implementation (Task 2)
+=============================================================================
+
+I am implementing a simple goal-based search agent in Python.
+The environment is a grid represented by an ASCII map. The agent starts at S
+and must reach G. The symbol # represents obstacles and . represents free
+cells.
+The agent can move up, down, left, or right, and every movement has cost 1.
+Implement A* search.
+Use Manhattan distance as the heuristic:
+
+    h(n) = |x - x_G| + |y - y_G|
+
+The program should:
+  - represent grid positions as states;
+  - maintain an appropriate frontier;
+  - calculate g(n), h(n) and f(n);
+  - avoid repeatedly expanding the same state;
+  - reconstruct the path when the goal is reached;
+  - report the path and its length;
+  - report the number of states expanded.
+
+Keep the implementation simple and explain the main components of the code.
+
+Also give me a plain BFS version of the same agent (same state/transition
+model, same grid) so I can compare blind vs informed search on the same map,
+and make the heuristic function a swappable parameter so I can later try
+h(n) = 0, Euclidean distance, and a scaled Manhattan distance without
+rewriting the search loop.
+
+---
+
+Follow-up note (not a separate prompt, a design decision I made myself
+before accepting the code): I asked for a parameterised `astar(grid, start,
+goal, heuristic=..., weight=...)` signature rather than a hard-coded
+Manhattan heuristic, specifically so Task 6 (the heuristic investigation)
+could reuse the exact same search loop instead of three copy-pasted
+variants - this keeps the comparison fair, since only the heuristic
+function changes between runs.

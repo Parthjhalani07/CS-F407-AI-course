@@ -1,0 +1,85 @@
+
+========================================================================
+TASK 4 Part A: First attempt - plain SGD, seed=0, lr=0.5, 3000 steps
+========================================================================
+Final loss: 0.690318   All 4 correct: False
+-> Got stuck near loss ln(2)=0.693 (network just predicts ~0.5 for everything).
+   This is the well-known flat local minimum of the sigmoid-XOR loss surface for
+   this initialisation - an optimisation problem, not an architecture problem.
+   Engineering fix (per Task 4 Part A's instructions): change only the optimiser
+   and/or seed, not the architecture/loss/data. Switching SGD -> Adam fixed it for
+   every seed tried except {0, 5}; seed=1 below is a clean example.
+
+========================================================================
+TASK 4 Part A/B: Baseline run (sigmoid hidden, random init, seed=1, Adam)
+========================================================================
+Initial loss : 0.7028
+Final loss   : 0.000093
+input     prob      pred    target  
+[0.0, 0.0]0.0001    0       0       
+[0.0, 1.0]0.9999    1       1       
+[1.0, 0.0]0.9999    1       1       
+[1.0, 1.0]0.0001    0       0       
+All 4 predictions correct: True
+
+First-layer weight gradient (dL/dW_hidden) after the final backward():
+tensor([[-1.3732e-07, -1.1792e-07],
+        [-1.1228e-06, -1.2765e-06]])
+
+gradient norm ||grad W_hidden||_2 at early steps: {0: 0.004304005764424801, 1: 0.0015978504670783877, 5: 0.0012651286087930202, 20: 0.0003726764116436243}
+
+========================================================================
+TASK 4 Part C: Symmetry experiment (all weights/biases zero-initialised)
+========================================================================
+Hidden-layer weight matrix at selected steps (row0 = unit A, row1 = unit B):
+  step    0: row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True
+  step    1: row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True
+  step    2: row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True
+  step    3: row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True
+  step    4: row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True
+  step    5: row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True
+  step    6: row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True
+  step    7: row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True
+
+After 200 steps, are the two hidden rows still identical? True
+Final loss (zero-init run): 0.693147
+All 4 predictions correct (zero-init run): False  (expected: False - a network with two identical hidden units behaves like one)
+
+========================================================================
+TASK 4 Part D: Activation experiment (same initial weights, only activation differs)
+========================================================================
+Activation  Final loss    4/4 correct?  Early ||grad W1||_2   
+sigmoid     0.017066      True          0.026860              
+tanh        0.347547      False         0.051409              
+relu        0.346703      False         0.075095              
+
+========================================================================
+TASK 5: Three-class extension (softmax + cross-entropy)
+========================================================================
+Final loss: 0.000957
+input     probs (class0,1,2)                      pred  target
+[0.0, 0.0][0.9989, 0.0011, 0.0]                   0     0     
+[0.0, 1.0][0.0003, 0.9992, 0.0005]                1     1     
+[1.0, 0.0][0.0003, 0.9992, 0.0005]                1     1     
+[1.0, 1.0][0.0, 0.0011, 0.9989]                   2     2     
+All 4 predictions correct: True
+
+Softmax probability vector for input [0.0, 0.0]: [0.998925507068634, 0.0010744699975475669, 3.858508179632736e-09]
+Sum of components: 1.0000000000
+
+Optional diagnostic: shift-invariance of softmax
+  logits            : [8.544184684753418, 1.70933198928833, -10.827726364135742]
+  logits + 100       : [108.54418182373047, 101.70933532714844, 89.17227172851562]
+  softmax(logits)    : [0.998925507068634, 0.0010744699975475669, 3.858508179632736e-09]
+  softmax(logits+100): [0.998925507068634, 0.001074476633220911, 3.858508179632736e-09]
+  max abs difference : 6.636e-09
+
+Unstable (naive, no max-subtraction) softmax on the shifted logits, for comparison:
+  exp(logits+100)          : [inf, inf, inf]  <- already overflowed to inf (float32 max ~3.4e38 < e^108)
+  naive exp(logits+100)/sum: [nan, nan, nan]  <- inf/inf = nan: the naive formula breaks
+  torch.softmax(logits+100): [0.998925507068634, 0.001074476633220911, 3.858508179632736e-09]  <- correct, because torch subtracts the max logit first
+  This is exactly why stable softmax implementations subtract max(logits) before exponentiating:
+  it makes the largest exponent 0 (exp(0)=1) and every other exponent <= 0, so nothing can overflow,
+  and because every logit is shifted by the SAME constant, the resulting ratios - the probabilities -
+  are mathematically unchanged (shown above: max abs difference from the unshifted softmax is ~1e-9,
+  i.e. only ordinary floating-point rounding, not a real difference).

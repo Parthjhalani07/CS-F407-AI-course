@@ -1,0 +1,58 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+========================================================================
+Encoder-decoder: machine translation (Helsinki-NLP/opus-mt-en-fr)
+========================================================================
+Loading weights:   0%|          | 0/258 [00:00<?, ?it/s]Loading weights: 100%|██████████| 258/258 [00:00<00:00, 6847.58it/s]
+[transformers] Both `max_new_tokens` (=60) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=60) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=60) and `max_length`(=512) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+EN: Artificial intelligence lets machines learn from data.
+FR: L'intelligence artificielle permet aux machines d'apprendre des données.
+
+EN: The warehouse robot searches for the shortest path to the goal.
+FR: Le robot de l'entrepôt recherche le chemin le plus court jusqu'au but.
+
+EN: A Bayesian network represents conditional independence assumptions.
+FR: Un réseau bayésien représente des hypothèses d'indépendance conditionnelle.
+
+
+========================================================================
+Encoder-only: sentiment analysis (distilbert-base-uncased-finetuned-sst-2-english)
+========================================================================
+Loading weights:   0%|          | 0/104 [00:00<?, ?it/s]Loading weights: 100%|██████████| 104/104 [00:00<00:00, 2721.03it/s]
+POSITIVE   (0.9999)  I loved this course, the labs were genuinely interesting.
+NEGATIVE   (0.9998)  The assignment was confusing and the deadline was far too short.
+POSITIVE   (0.9825)  The lecture covered Bayesian networks today.
+
+========================================================================
+Decoder-only: GPT-style generation (distilgpt2)
+========================================================================
+Loading weights:   0%|          | 0/76 [00:00<?, ?it/s]Loading weights: 100%|██████████| 76/76 [00:00<00:00, 4557.66it/s]
+Prompt: 'The warehouse robot'
+Continuation: 'The warehouse robot is a robot that can be used to perform tasks such as cleaning, cleaning, and cleaning.\n\n\n\n\n\n\n\n\n\n\n'
+
+Prompt: 'Artificial intelligence is'
+Continuation: 'Artificial intelligence is a new technology that is being developed by researchers at the University of California, Berkeley.\n\n\n\n\n\n\n\n\n\n\n\n\n'
+
+
+========================================================================
+Local open-weights LLM vs Claude: same prompts, compared
+========================================================================
+Loading Qwen/Qwen2.5-0.5B-Instruct locally via transformers (substituting for Ollama - see README.md for why)...
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  44%|████▍     | 128/290 [00:00<00:00, 1277.32it/s]Loading weights:  88%|████████▊ | 256/290 [00:00<00:00, 955.79it/s] Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1081.42it/s]
+[transformers] Passing `generation_config` together with generation-related arguments=({'max_new_tokens', 'do_sample'}) is deprecated and will be removed in future versions. Please pass either a `generation_config` object OR all generation parameters explicitly, but not both.
+[transformers] Both `max_new_tokens` (=60) and `max_length`(=20) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer Qwen2Tokenizer. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+[transformers] Both `max_new_tokens` (=60) and `max_length`(=20) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=60) and `max_length`(=20) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+Model loaded in 3.2s
+
+Prompt: In one sentence, what is self-attention in a transformer?
+Qwen2.5-0.5B-Instruct (19.0s): Self-attention is a mechanism within transformers that allows the model to focus on specific parts of the input sequence based on their context, improving its ability to understand and generate natural language.
+
+Prompt: In one sentence, why does A* search use a heuristic?
+Qwen2.5-0.5B-Instruct (22.9s): A* search uses a heuristic to estimate the cost of reaching the goal from a given node in the search tree, which helps guide the algorithm towards the optimal path.
+
+Prompt: In one sentence, what does it mean for a heuristic to be admissible?
+Qwen2.5-0.5B-Instruct (16.7s): A heuristic is considered admissible if it provides an optimal or near-optimal solution within the constraints of the problem being solved.

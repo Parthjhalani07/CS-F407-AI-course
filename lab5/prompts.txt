@@ -1,0 +1,41 @@
+Prompts used with the LLM (Claude)
+===================================
+
+Prompt 1 (Part V - first-order model)
+--------------------------------------
+Write a simple Python implementation of a first-order autoregressive
+language model. The model should:
+  1. take a list of tokenised sentences as training data;
+  2. count transitions between consecutive tokens;
+  3. construct the conditional distribution P(X_t | X_{t-1});
+  4. display the probabilities for a specified previous token;
+  5. predict the most probable next token;
+  6. generate a sentence by repeatedly sampling the next token;
+  7. stop when the <END> token is generated.
+
+Do not use a machine-learning library or a pretrained language model.
+Use ordinary Python data structures and random sampling.
+
+Prompt 2 (Part XII - extend to second order)
+---------------------------------------------
+Modify the existing first-order autoregressive model into a second-order
+model. The model should estimate
+
+    P(X_t | X_{t-2}, X_{t-1}).
+
+Represent the model using counts of observed triples and use these counts
+to construct conditional probability distributions. Do not replace the
+model with a neural network or a pretrained language model.
+
+Design decision made independently before writing the above prompts
+---------------------------------------------------------------------
+Rather than writing the second-order model as a separate, copy-pasted
+implementation, I asked for (and designed, in `bayesian_lm.py`, via the
+`order` parameter of `NgramModel`/`build_counts`/`tokenize`) a single
+counting mechanism parameterised by context length. Padding the start of
+every sentence with `order` <START> tokens (instead of a single one) means
+"first-order" and "second-order" are just two instantiations of the same
+"predict the next token from the last `order` tokens" model - which is
+exactly the chain-rule idea the lab is built around, and is what makes the
+Part XIII comparison a fair comparison of the *model order*, not of two
+differently-written pieces of code.

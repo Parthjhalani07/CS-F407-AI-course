@@ -1,0 +1,59 @@
+Prompts used with the LLM (Claude), per llm_generated.py
+===========================================================
+
+Prompt 1 (build the network)
+-----------------------------
+Build a pgmpy DiscreteBayesianNetwork for the network
+
+    C -> R,  C -> S,  R -> W,  S -> W
+
+with:
+  P(C=1) = 0.5
+  P(R=1|C=0)=0.2, P(R=1|C=1)=0.8
+  P(S=1|C=0)=0.5, P(S=1|C=1)=0.1
+  P(W=1|R=0,S=0)=0.01, P(W=1|R=0,S=1)=0.90, P(W=1|R=1,S=0)=0.90, P(W=1|R=1,S=1)=0.99
+
+Call check_model() before returning, and raise if it fails. State explicitly
+what order the evidence columns of CPD(W) must be in.
+
+Prompt 2 (maximum-likelihood parameter estimation)
+----------------------------------------------------
+Given a pandas DataFrame `data` with integer columns C, R, S, W (0/1) and
+the fixed graph structure above, fit the CPTs by maximum likelihood using
+pgmpy and return a fitted DiscreteBayesianNetwork. Do not relearn the graph
+structure - only the parameters. Use whatever MLE estimator class the
+currently-installed pgmpy version provides.
+
+Prompt 3 (revise Prompt 2 to Bayesian/BDeu estimation)
+---------------------------------------------------------
+Revise the fitting function above to use Bayesian parameter estimation
+with a BDeu prior and an explicit equivalent_sample_size parameter,
+instead of maximum likelihood, while keeping everything else (graph
+structure, input DataFrame) unchanged.
+
+Notes on how these were used (not separate prompts, design decisions
+made independently)
+-----------------------------------------------------------------------
+- The installed pgmpy version (1.1.2) turned out to use a different API
+  than the one implied by a naive "from pgmpy.estimators import
+  MaximumLikelihoodEstimator" (the old class-based `model.fit(data,
+  estimator=MaximumLikelihoodEstimator)` call raises
+  `TypeError: Estimator should be an instance...` on this version). This
+  was discovered by running the generated code, not by reading the
+  prompt - see Part VI/"Inspect the LLM-generated code" discussion in
+  README.md for how this was diagnosed and fixed (switched to
+  `pgmpy.parameter_estimator.DiscreteMLE()` /
+  `DiscreteBayesianEstimator(...)` instances, matching this installed
+  version's own docstring example).
+- No local Qwen2.5-Coder model was downloaded/run for this lab. The
+  reference notebook's own setup cell for that model is explicitly
+  annotated "(not using this)" even by its own author, so the engineering
+  pipeline (specify -> generate -> inspect -> approve -> execute ->
+  validate) was practised using an LLM directly in a coding session
+  (Claude) instead, which is the same pattern used throughout labs
+  4 and 5 of this submission.
+- `trusted_model.py` (the hand-written oracle, including the brute-force
+  `enumerate_posterior`) was written and verified BEFORE any of the three
+  prompts above were used, so it could serve as ground truth for
+  everything the LLM-generated code produced - this ordering was a
+  deliberate choice, not incidental.

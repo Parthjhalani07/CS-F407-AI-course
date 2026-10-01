@@ -1,0 +1,50 @@
+Prompt used with the LLM (Claude), Task 3
+============================================
+Generate minimal PyTorch code for the following model and dataset. Do not
+change the architecture or task.
+
+Model: 2 inputs -> 2 hidden units (tanh/sigmoid/relu, selectable) -> 1
+output logit. Use nn.Linear for both layers, BCEWithLogitsLoss (not a
+sigmoid output + plain BCELoss, for numerical stability), and random
+weight initialisation unless a zero-init flag is set, in which case
+every weight AND bias should be exactly zero.
+
+Dataset (the sensor-disagreement / XOR task), as explicit tensors:
+  X = [[0,0],[0,1],[1,0],[1,1]]
+  y = [0,1,1,0]
+
+After training, report the final loss, all four probabilities and
+thresholded predictions, and one parameter-gradient tensor (the hidden
+layer's weight gradient after backward()). Set a random seed for
+reproducibility and explain each test in one sentence.
+
+Also expose: (a) the gradient norm of the hidden-layer weights at
+specific recorded steps, so an early-training gradient can be inspected
+without storing the full training history; (b) a record of the hidden
+weight matrix at the first several steps, so the symmetry experiment
+(Task 4 Part C) can inspect whether the two hidden units' weight rows
+stay identical over time, not just at the end.
+
+Design decisions made independently before/while using this prompt
+------------------------------------------------------------------------
+- I specified full-batch training over the fixed 4-example dataset (not
+  mini-batches) myself, since the task is tiny and deterministic and
+  mini-batching would only add irrelevant sampling noise to results that
+  are supposed to be about architecture and activation, not optimisation
+  stochasticity.
+- I asked for BCEWithLogitsLoss over "sigmoid output + BCELoss" myself
+  (matching the lab's own parenthetical preference), since it is
+  numerically more stable (it internally uses the log-sum-exp trick
+  rather than computing log(sigmoid(x)) directly, which can underflow
+  for very negative logits) - this is a standard PyTorch engineering
+  recommendation, not something that needed to be discovered by running
+  the code.
+- Task 4 Part A's own instructions explicitly permit changing "learning
+  rate, number of steps, seed, or optimiser" if the first attempt does
+  not learn correctly, while forbidding changes to the architecture/task.
+  My first attempt (plain SGD, seed=0, lr=0.5) got stuck in the
+  well-documented flat local minimum of the sigmoid-XOR loss surface
+  (see README.md Task 4A) - this was discovered by running the generated
+  code and inspecting the reported loss/predictions, not predicted in
+  advance, and fixed by switching the optimiser to Adam and changing the
+  seed, exactly the kind of engineering-only change the task allows.

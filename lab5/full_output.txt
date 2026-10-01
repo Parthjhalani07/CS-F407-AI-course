@@ -1,0 +1,181 @@
+
+======================================================================
+PART IV: Conditional Probability Table (order-1)
+======================================================================
+P(next | 'the') = {'cat': 0.25, 'mat': 0.16666666666666666, 'rug': 0.16666666666666666, 'dog': 0.25, 'park': 0.16666666666666666}
+P(next | 'cat') = {'sat': 0.6666666666666666, 'ran': 0.3333333333333333}
+P(next | 'dog') = {'sat': 0.6666666666666666, 'ran': 0.3333333333333333}
+P(next | 'sat') = {'on': 1.0}
+P(next | 'ran') = {'to': 1.0}
+
+Zero-probability transitions for these words (never observed in data):
+  'the' -> never followed by: ['<END>', 'on', 'ran', 'sat', 'the', 'to']
+  'cat' -> never followed by: ['<END>', 'cat', 'dog', 'mat', 'on', 'park', 'rug', 'the', 'to']
+  'dog' -> never followed by: ['<END>', 'cat', 'dog', 'mat', 'on', 'park', 'rug', 'the', 'to']
+  'sat' -> never followed by: ['<END>', 'cat', 'dog', 'mat', 'park', 'ran', 'rug', 'sat', 'the', 'to']
+  'ran' -> never followed by: ['<END>', 'cat', 'dog', 'mat', 'on', 'park', 'ran', 'rug', 'sat', 'the']
+
+======================================================================
+PART VII: Normalization test (order-1)
+======================================================================
+  context=('<START>',)                   sum(P)=1.000000  OK
+  context=('the',)                       sum(P)=1.000000  OK
+  context=('cat',)                       sum(P)=1.000000  OK
+  context=('sat',)                       sum(P)=1.000000  OK
+  context=('on',)                        sum(P)=1.000000  OK
+  context=('mat',)                       sum(P)=1.000000  OK
+  context=('rug',)                       sum(P)=1.000000  OK
+  context=('dog',)                       sum(P)=1.000000  OK
+  context=('ran',)                       sum(P)=1.000000  OK
+  context=('to',)                        sum(P)=1.000000  OK
+  context=('park',)                      sum(P)=1.000000  OK
+All contexts normalize to 1.0: True
+
+======================================================================
+PART VII: Normalization test (order-2)
+======================================================================
+  context=('<START>', '<START>')         sum(P)=1.000000  OK
+  context=('<START>', 'the')             sum(P)=1.000000  OK
+  context=('the', 'cat')                 sum(P)=1.000000  OK
+  context=('cat', 'sat')                 sum(P)=1.000000  OK
+  context=('sat', 'on')                  sum(P)=1.000000  OK
+  context=('on', 'the')                  sum(P)=1.000000  OK
+  context=('the', 'mat')                 sum(P)=1.000000  OK
+  context=('the', 'rug')                 sum(P)=1.000000  OK
+  context=('the', 'dog')                 sum(P)=1.000000  OK
+  context=('dog', 'sat')                 sum(P)=1.000000  OK
+  context=('dog', 'ran')                 sum(P)=1.000000  OK
+  context=('ran', 'to')                  sum(P)=1.000000  OK
+  context=('to', 'the')                  sum(P)=1.000000  OK
+  context=('the', 'park')                sum(P)=1.000000  OK
+  context=('cat', 'ran')                 sum(P)=1.000000  OK
+All contexts normalize to 1.0: True
+
+======================================================================
+PART VIII: Next-word prediction (order-1)
+======================================================================
+P(X_t+1 | X_t='the') = {'cat': 0.25, 'mat': 0.16666666666666666, 'rug': 0.16666666666666666, 'dog': 0.25, 'park': 0.16666666666666666}
+  argmax_w P(w | 'the') = 'cat'
+
+P(X_t+1 | X_t='cat') = {'sat': 0.6666666666666666, 'ran': 0.3333333333333333}
+  argmax_w P(w | 'cat') = 'sat'
+
+P(X_t+1 | X_t='dog') = {'sat': 0.6666666666666666, 'ran': 0.3333333333333333}
+  argmax_w P(w | 'dog') = 'sat'
+
+P(X_t+1 | X_t='sat') = {'on': 1.0}
+  argmax_w P(w | 'sat') = 'on'
+
+P(X_t+1 | X_t='ran') = {'to': 1.0}
+  argmax_w P(w | 'ran') = 'to'
+
+
+======================================================================
+PART IX: Generate 20 sentences by sampling (order1)
+======================================================================
+   1. the cat sat on the dog ran to the cat sat on the cat sat on the dog ran to
+   2. the dog sat on the mat
+   3. the park
+   4. the dog sat on the rug
+   5. the park
+   6. the cat sat on the cat sat on the mat
+   7. the mat
+   8. the dog sat on the mat
+   9. the rug
+  10. the dog sat on the mat
+  11. the park
+  12. the mat
+  13. the mat
+  14. the mat
+  15. the mat
+  16. the rug
+  17. the cat sat on the cat sat on the park
+  18. the dog ran to the dog sat on the park
+  19. the rug
+  20. the park
+Saved to generated_order1.txt
+
+======================================================================
+PART IX: Generate 20 sentences by sampling (order2)
+======================================================================
+   1. the cat sat on the rug
+   2. the cat sat on the mat
+   3. the dog sat on the mat
+   4. the cat sat on the mat
+   5. the dog ran to the park
+   6. the dog sat on the rug
+   7. the cat sat on the mat
+   8. the cat sat on the rug
+   9. the dog sat on the rug
+  10. the dog ran to the park
+  11. the dog ran to the park
+  12. the cat sat on the rug
+  13. the cat ran to the park
+  14. the dog sat on the rug
+  15. the dog sat on the rug
+  16. the cat sat on the rug
+  17. the cat ran to the park
+  18. the dog sat on the mat
+  19. the dog ran to the park
+  20. the cat sat on the rug
+Saved to generated_order2.txt
+
+======================================================================
+PART X: Deterministic (greedy) vs probabilistic (sampling) - order-1
+======================================================================
+Mode A - greedy (argmax every step):
+    the cat sat on the cat sat on the cat sat on the cat sat on the cat sat on
+    the cat sat on the cat sat on the cat sat on the cat sat on the cat sat on
+    the cat sat on the cat sat on the cat sat on the cat sat on the cat sat on
+    the cat sat on the cat sat on the cat sat on the cat sat on the cat sat on
+    the cat sat on the cat sat on the cat sat on the cat sat on the cat sat on
+Mode B - sampling:
+    the cat sat on the dog ran to the cat sat on the cat sat on the dog ran to
+    the dog sat on the mat
+    the park
+    the dog sat on the rug
+    the park
+Distinct greedy sentences : 1 / 5
+Distinct sampled sentences: 4 / 5
+
+======================================================================
+PART X: Deterministic (greedy) vs probabilistic (sampling) - order-2
+======================================================================
+Mode A - greedy (argmax every step):
+    the cat sat on the mat
+    the cat sat on the mat
+    the cat sat on the mat
+    the cat sat on the mat
+    the cat sat on the mat
+Mode B - sampling:
+    the cat sat on the rug
+    the cat sat on the mat
+    the dog sat on the mat
+    the cat sat on the mat
+    the dog ran to the park
+Distinct greedy sentences : 1 / 5
+Distinct sampled sentences: 4 / 5
+
+======================================================================
+PART XIII: Comparing the first-order and second-order models
+======================================================================
+Distinct contexts   : order1=11   order2=15
+Distinct parameters : order1=17   order2=19
+Contexts with only ONE possible continuation (zero uncertainty): order1=8/11   order2=11/15
+
+Diversity over 30 sampled sentences: order1 unique=13/30   order2 unique=6/30
+
+Sample order-1 generations:
+    the cat sat on the dog ran to the cat sat on the cat sat on the dog ran to
+    the dog sat on the mat
+    the park
+    the dog sat on the rug
+    the park
+    the cat sat on the cat sat on the mat
+Sample order-2 generations:
+    the cat sat on the rug
+    the cat sat on the mat
+    the dog sat on the mat
+    the cat sat on the mat
+    the dog ran to the park
+    the dog sat on the rug

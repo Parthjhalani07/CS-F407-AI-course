@@ -1,0 +1,45 @@
+Prompts used with the LLM (Claude)
+===================================
+
+Prompt 1 (Task 3, following the lab's suggested prompt)
+----------------------------------------------------------
+Write a well-documented Python program implementing a goal-based agent
+for the warehouse navigation problem shown above (the 21-column ASCII
+map with S at the loading bay and G at the dispatch area, # obstacles,
+. free space, moves Up/Down/Left/Right).
+
+The program should:
+  - represent the warehouse as a two-dimensional grid;
+  - determine a collision-free path from S to G;
+  - avoid all obstacles;
+  - print either the path found or a suitable message if no path exists;
+  - explain the search algorithm that has been chosen and why it is
+    appropriate;
+  - structure the code around explicit goal-based-agent components
+    (environment model, current state, goal, decision-making/planning
+    component) rather than as a single undifferentiated function, so the
+    architecture from the lecture is visible in the code, not just in
+    the final printed path.
+
+TEST TO SEE IF the generated program runs: see Task 3 answers in
+README.md - yes, on the first attempt (`warehouse_agent.py`, as written).
+
+Prompt 2 (iterative improvement - Task 1's "improve software through
+iterative prompting" objective)
+----------------------------------------------------------------------
+The agent only reports a path; it doesn't verify it. Add an independent
+test that re-derives, from the environment alone (not from the planner's
+internal bookkeeping), that a returned path: starts at S, ends at G,
+only visits free cells, and only takes single-step Up/Down/Left/Right
+moves between consecutive cells. Also add a no-solution test case (a map
+where G is walled off) and a trivial test case (G immediately adjacent
+to S), and confirm the program reports failure cleanly on the
+no-solution case rather than hanging.
+
+This became `test_agent.py`. Running it was the actual check for
+"did the LLM generate a working program on the first attempt" in a
+meaningful sense - the original `warehouse_agent.py` alone only showed
+that *a* path was printed, not that the path was actually valid; Prompt
+2's independent `validate_path()` check is what turns "a path was
+printed" into "a path was printed and confirmed valid by re-deriving
+validity from the environment, not by trusting the planner."

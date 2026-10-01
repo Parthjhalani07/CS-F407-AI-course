@@ -1,0 +1,79 @@
+============================================================
+TASK 3: Test the Generated Program
+============================================================
+
+Test 1: Original warehouse
+--- A* on original warehouse ---
+Solution found : True
+Path length    : 40 moves
+Path           : [(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (2, 5), (3, 5), (4, 5), (5, 5), (5, 6), (5, 7), (5, 8), (5, 9), (5, 10), (5, 11), (5, 12), (5, 13), (4, 13), (3, 13), (3, 12), (3, 11), (3, 10), (3, 9), (3, 8), (3, 7), (2, 7), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12), (1, 13), (1, 14), (1, 15), (2, 15), (3, 15), (4, 15), (5, 15), (6, 15), (7, 15)]
+States expanded: 64
+
+Test 2: Trivial case (goal adjacent to start)
+--- A* on trivial map ---
+Solution found : True
+Path length    : 1 moves
+Path           : [(1, 1), (1, 2)]
+States expanded: 2
+
+Test 3: No solution (goal unreachable)
+--- A* on unreachable map ---
+Solution found : False
+States expanded: 9
+
+Test 4: Alternative paths (open room)
+--- A* on open-room map ---
+Solution found : True
+Path length    : 11 moves
+Path           : [(1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)]
+States expanded: 30
+
+--- BFS on open-room map ---
+Solution found : True
+Path length    : 11 moves
+Path           : [(1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)]
+States expanded: 30
+
+============================================================
+TASK 5: Compare A* with Blind Search
+============================================================
+
+Map: original warehouse
+Measure                BFS        A*
+Solution found        True      True
+Path length             40        40
+States expanded         64        64
+
+Map: open room
+Measure                BFS        A*
+Solution found        True      True
+Path length             11        11
+States expanded         30        30
+
+Map: big open room
+Measure                BFS        A*
+Solution found        True      True
+Path length             20        20
+States expanded        309        21
+
+============================================================
+TASK 6: Investigate the Heuristic
+============================================================
+
+--- Map: original warehouse (single corridor) ---
+Manhattan (h = |dx|+|dy|)                     found=True   path_len=40     expanded=64
+Zero (h = 0, i.e. plain Dijkstra/uniform-cost) found=True   path_len=40     expanded=64
+Euclidean distance                            found=True   path_len=40     expanded=64
+Manhattan x 2 (inadmissible, overestimates)   found=True   path_len=40     expanded=64
+
+--- Map: open room (branching) ---
+Manhattan (h = |dx|+|dy|)                     found=True   path_len=11     expanded=30
+Zero (h = 0, i.e. plain Dijkstra/uniform-cost) found=True   path_len=11     expanded=30
+Euclidean distance                            found=True   path_len=11     expanded=28
+Manhattan x 2 (inadmissible, overestimates)   found=True   path_len=11     expanded=12
+
+--- Map: big open room (no obstacles) ---
+Manhattan (h = |dx|+|dy|)                     found=True   path_len=20     expanded=21
+Zero (h = 0, i.e. plain Dijkstra/uniform-cost) found=True   path_len=20     expanded=309
+Euclidean distance                            found=True   path_len=20     expanded=21
+Manhattan x 2 (inadmissible, overestimates)   found=True   path_len=20     expanded=21

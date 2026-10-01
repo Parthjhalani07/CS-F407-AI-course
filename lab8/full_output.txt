@@ -1,0 +1,21 @@
+
+--- Original warehouse map ---
+Path found from (1, 1) to (1, 19):
+(1, 1) -> (1, 2) -> (1, 3) -> (1, 4) -> (2, 4) -> (2, 5) -> (2, 6) -> (2, 7) -> (1, 7) -> (1, 8) -> (1, 9) -> (1, 10) -> (1, 11) -> (1, 12) -> (1, 13) -> (1, 14) -> (1, 15) -> (1, 16) -> (1, 17) -> (1, 18) -> (1, 19)
+Path length: 20 moves
+States expanded: 59
+Independent path validation: PASSED (every step is a valid move onto a free cell, S->...->G)
+
+--- Trivial case (goal adjacent to start) ---
+Path found from (1, 1) to (1, 2):
+(1, 1) -> (1, 2)
+Path length: 1 moves
+States expanded: 2
+Independent path validation: PASSED (every step is a valid move onto a free cell, S->...->G)
+
+--- No-path case (goal walled off) ---
+No collision-free path exists from (1, 1) to (3, 5).
+(States expanded before giving up: 9)
+Correctly reported no path (did not loop or crash).
+
+All tests passed.
